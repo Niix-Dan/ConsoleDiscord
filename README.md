@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://i.imgur.com/3snVM97.png" width="256" height="256"/>
+<img src="https://i.imgur.com/uQR1lUh.png" width="256" height="256"/>
 </p>
 <p align="center">
 <a href="https://github.com/Niix-Dan/ConsoleDiscord/releases/latest"><img src="https://img.shields.io/github/release/Niix-Dan/ConsoleDiscord.svg"></a>
