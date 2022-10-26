@@ -33,4 +33,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ConsoleDiscord
-        path: /home/runner/work/ConsoleDiscord/ConsoleDiscord/target/ConsoleDiscord-shaded.jar
+        path: /home/runner/work/ConsoleDiscord/ConsoleDiscord/target/ConsoleDiscord-1.0.0-shaded.jar
