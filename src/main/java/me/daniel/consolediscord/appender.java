@@ -41,6 +41,23 @@ public class appender extends AbstractAppender {
                 try {
                     if(appender.this.messages.length() != 0) {
                         appender.this.messages = appender.this.messages.replaceAll("\033\\[[;\\d]*m", "");
+                        
+                        appender.this.messages = appender.this.messages.replaceAll("&a", "");
+                        appender.this.messages = appender.this.messages.replaceAll("&b", "");
+                        appender.this.messages = appender.this.messages.replaceAll("&c", "");
+                        appender.this.messages = appender.this.messages.replaceAll("&d", "");
+                        appender.this.messages = appender.this.messages.replaceAll("&e", "");
+                        appender.this.messages = appender.this.messages.replaceAll("&f", "");
+                        
+                        appender.this.messages = appender.this.messages.replaceAll("&r", "");
+                        appender.this.messages = appender.this.messages.replaceAll("&k", "");
+                        appender.this.messages = appender.this.messages.replaceAll("&l", "");
+                        appender.this.messages = appender.this.messages.replaceAll("&m", "");
+                        appender.this.messages = appender.this.messages.replaceAll("&n", "");
+                        appender.this.messages = appender.this.messages.replaceAll("&o", "");
+                        appender.this.messages = appender.this.messages.replaceAll("&u", "");
+                        
+                        for(int i = 0 ; i < 9 ; ++i) { appender.this.messages = appender.this.messages.replaceAll("&"+i, ""); }
                         if(appender.this.messages.length() > 2000) {
                             String messageTooLong = "\n\nEssa mensagem excedeu o limite de 2000 caracteres do discord. Para ver o log completo olhe no console!";
                             appender.this.messages = appender.this.messages.substring(0, 1999 - messageTooLong.length() - 6);
