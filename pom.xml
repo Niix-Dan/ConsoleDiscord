@@ -67,5 +67,6 @@
                 </executions>
             </plugin>
         </plugins>
+    <finalName>ConsoleDiscord</finalName>
     </build>
 </project>
