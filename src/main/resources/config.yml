@@ -1,4 +1,44 @@
+#
+#   __         _____                     _            _____  _                       _
+#   \ \      / ____|                    | |          |  __ \(_)                     | |
+#    \ \    | |     ___  _ __  ___  ___ | | ___      | |  | |_ ___  ___ ___  _ __ __| |
+#     > >   | |    / _ \| '_ \/ __|/ _ \| |/ _ \     | |  | | / __|/ __/ _ \| '__/ _` |
+#    / /    | |___| (_) | | | \__ \ (_) | |  __/     | |__| | \__ \ (_| (_) | | | (_| |
+#   /_/      \_____\___/|_| |_|___/\___/|_|\___|     |_____/|_|___/\___\___/|_|  \__,_|
+#
+#     By: Niix-dan
+#     Source: https://github.com/Niix-Dan/ConsoleDiscord
+#
 
-# Coloque as informações do bot abaixo
-Token: ""
-Canal: ""
+# Discord Bot Infos
+Discord-Bot:
+  # Discord Applications - https://discord.com/developers/applications
+  Token: ""
+  Channel: ""
+
+  # BlockedCmds: ["op", "stop"] - Commands that you don't want anyone to use in the console
+  BlockedCmds: []
+
+  # Whitelist of admins that can use the console
+  Whitelist:
+    Enabled: false
+    List: ["YOUR-DISCORD-ID"]
+    Message: "Womp womp, no commands for you"
+
+
+Messages:
+  NoPermMsg: "&d[ConsoleDiscord] &cNope."
+
+Config:
+  IsModded: false # Change this if your server has mods
+  LibsUpdater: true
+  Debug: false
+
+  Filter: # Filter commands from discord (Advanced users only)
+    Enabled: false
+    RegEx: ""
+    Replace: ""
+
+  # Please don't touch unless you know what you're doing
+  Config_version: 1.0
+  Libs_version: 1.0

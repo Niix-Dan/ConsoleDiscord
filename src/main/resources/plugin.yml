@@ -1,4 +1,19 @@
 name: ConsoleDiscord
-version: 1.0
-main: me.daniel.consolediscord.ConsoleDiscord
-author: Dan
+version: '${project.version}'
+main: niix.dan.consolediscord.ConsoleDiscord
+load: STARTUP
+authors: [Niix-Dan]
+description: A plugin that links your console to a discord channel
+website: https://github.com/Niix-Dan/ConsoleDiscord
+
+commands:
+  consolediscord:
+    permission: consolediscord.cd
+    description: "ConsoleDiscord Configs"
+    usage: "/consolediscord [reload, jda[<restart>]"
+
+permissions:
+  consolediscord.cd:
+    default: op
+    description: ConsoleDiscord Admin
+
