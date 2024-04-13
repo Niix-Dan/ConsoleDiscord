@@ -14,7 +14,7 @@
 
 | Download |Link|
 | ------------- | ------------- |
-| Latest version|[Click Here](https://github.com/Daniel-code15/ConsoleDiscord/releases/download/1.0.0/ConsoleDiscord-1.0.0.jar)|
+| Latest version|[Click Here](https://github.com/Niix-Dan/ConsoleDiscord/releases/download/Releases/ConsoleDiscord.jar)|
 | Releases|[Click Here](https://github.com/Daniel-code15/ConsoleDiscord/releases)|
 
 
