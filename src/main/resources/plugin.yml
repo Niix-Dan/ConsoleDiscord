@@ -1,5 +1,5 @@
 name: ConsoleDiscord
-version: '${project.version}'
+version: '1.1.0'
 main: niix.dan.consolediscord.ConsoleDiscord
 load: STARTUP
 authors: [Niix-Dan]
@@ -10,7 +10,7 @@ commands:
   consolediscord:
     permission: consolediscord.cd
     description: "ConsoleDiscord Configs"
-    usage: "/consolediscord [reload, jda[<restart>]"
+    usage: "/consolediscord [reload, jda<restart>]"
 
 permissions:
   consolediscord.cd:

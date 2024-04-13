@@ -11,21 +11,19 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class Listener extends ListenerAdapter {
     private ConsoleDiscord plugin;
     private JDA jda;
-    private boolean debug = false;
 
     public Listener(ConsoleDiscord plugin, JDA j) {
         this.plugin = plugin;
         this.jda = j;
-
-        this.debug = plugin.getConfig().getBoolean("Config.Debug");
     }
 
     @Override
     public void onMessageReceived(MessageReceivedEvent msg) {
-        if(debug) {
+        if(msg.getAuthor().getId().equalsIgnoreCase(jda.getSelfUser().getId())) return;
+        if(plugin.getConfig().getBoolean("Config.Debug")) {
             Bukkit.getConsoleSender().sendMessage(
                     ChatColor.GRAY +
-                    "[DEBUG] MessageReceived: "
+                    "\n[DEBUG] MessageReceived: "
                     + "\n - Channel: "+msg.getChannel().getId()
                     + "\n - IsBot: "+msg.getAuthor().isBot()
                     + "\n - MessageContent: "+msg.getMessage().getContentRaw()
@@ -37,7 +35,7 @@ public class Listener extends ListenerAdapter {
         if(!msg.getChannel().getId().equalsIgnoreCase(plugin.getConfig().getString("Discord-Bot.Channel"))) return;
 
         if(plugin.getConfig().getBoolean("Discord-Bot.Whitelist.Enabled") && !plugin.getConfig().getStringList("Discord-Bot.Whitelist.List").contains(msg.getAuthor().getId())) {
-            msg.getMessage().reply(plugin.getConfig().getString("Discord-Bot.Whitelist.Message"));
+            msg.getMessage().reply(plugin.getConfig().getString("Discord-Bot.Whitelist.Message")).submit();
             return;
         }
 

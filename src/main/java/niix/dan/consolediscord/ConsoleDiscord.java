@@ -35,15 +35,18 @@ public final class ConsoleDiscord extends JavaPlugin {
         new Updater(this);
 
         Bot();
-        RunAppender();
     }
 
     @Override
     public void onDisable() {
         plugin = null;
-        this.jda.shutdown();
-        this.appender.jda.shutdown();
-        this.appender.stop();
+        try {
+            this.jda.shutdown();
+            this.appender.jda.shutdown();
+            this.appender.stop();
+        } catch(Exception ex) {
+            // Failed shutdown
+        }
     }
 
     private void registerConfigs() {
@@ -80,8 +83,6 @@ public final class ConsoleDiscord extends JavaPlugin {
         }
 
         if(args[0].equalsIgnoreCase("reload")) {
-            sender.sendMessage(ChatColor.LIGHT_PURPLE+"Saving config...");
-            saveConfig();
             sender.sendMessage(ChatColor.LIGHT_PURPLE+"Reloading config...");
             reloadConfig();
             sender.sendMessage(ChatColor.LIGHT_PURPLE+"Done!");
@@ -91,15 +92,18 @@ public final class ConsoleDiscord extends JavaPlugin {
             if(args.length <= 1) {sender.sendMessage(ChatColor.RED+cmd.getUsage()); return true;}
 
             if(args[1].equalsIgnoreCase("restart")) {
-                sender.sendMessage(ChatColor.RED+"Restarting JDA & Appender...");
-                this.jda.shutdownNow();
-                this.appender.jda.shutdownNow();
-                this.appender.stop();
+                try {
+                    sender.sendMessage(ChatColor.RED+"Restarting JDA & Appender...");
+                    this.jda.shutdownNow();
+                    this.appender.jda.shutdownNow();
+                    this.appender.stop();
 
-                Bot();
-                sender.sendMessage(ChatColor.GREEN+"Done! JDA Restated Successfully");
-                RunAppender();
-                sender.sendMessage(ChatColor.GREEN+"Done! Appender Restated Successfully");
+                    Bot();
+                    sender.sendMessage(ChatColor.GREEN+"Done! JDA Restated Successfully");
+                    sender.sendMessage(ChatColor.GREEN+"Done! Appender Restated Successfully");
+                } catch(Exception exx) {
+                    sender.sendMessage(ChatColor.RED+"Error! Please check the logs.");
+                }
             }
         }
 
@@ -110,11 +114,16 @@ public final class ConsoleDiscord extends JavaPlugin {
     public void Bot() {
         if(canRun) {
             try {
-                this.jda = JDABuilder.createDefault(getConfig().getString("Discord-Bot.Token"), GatewayIntent.GUILD_MESSAGES).build();
-
+                this.jda = JDABuilder.createDefault(getConfig().getString("Discord-Bot.Token"), GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT).build();
                 jda.addEventListener(new Object[] { new Listener(this, this.jda) });
                 Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"JDA Login Successfully - Bot Online");
             } catch (Exception e) {
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"JDA Login Error: "+e.getMessage());
+            }
+
+            try {
+                RunAppender();
+            } catch(Exception e) {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"JDA Login Error: "+e.getMessage());
             }
         }

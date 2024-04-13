@@ -13,7 +13,7 @@ public class Appender extends AbstractAppender {
     private String messages = "";
 
     public Appender(ConsoleDiscord plugin, JDA j) {
-        super("MyLogAppender", null, null);
+        super("ConsoleDiscordLogAppender", null, null);
         this.plugin = plugin;
         this.jda = j;
     }
@@ -40,8 +40,9 @@ public class Appender extends AbstractAppender {
                             msg = msg.substring(0, 1999 - messageTooLong.length() - 8);
                             msg =msg + messageTooLong;
                         }
+
+                        jda.getTextChannelById(plugin.getConfig().getString("Discord-Bot.Channel")).sendMessage("```" + msg + "```").submit();
                     }
-                    jda.getTextChannelById(plugin.getConfig().getString("Discord-Bot.Channel")).sendMessage("```" + msg + "```").submit();
                 } catch(NullPointerException ex) {
                     Bukkit.getConsoleSender().sendMessage(ex.getMessage());
                 }
