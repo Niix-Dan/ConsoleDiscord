@@ -41,9 +41,18 @@
           <id>spigotmc-repo</id>
           <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
       </repository>
+
   </repositories>
 
   <dependencies>
+      <!-- https://mvnrepository.com/artifact/org.kohsuke/github-api -->
+      <dependency>
+          <groupId>org.kohsuke</groupId>
+          <artifactId>github-api</artifactId>
+          <version>1.125</version>
+      </dependency>
+
+
       <!-- https://mvnrepository.com/artifact/net.dv8tion/JDA -->
       <dependency>
           <groupId>net.dv8tion</groupId>

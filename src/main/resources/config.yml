@@ -19,20 +19,25 @@ Discord-Bot:
   # BlockedCmds: ["op", "stop"] - Commands that you don't want anyone to use in the console
   BlockedCmds: []
 
-  # Whitelist of admins that can use the console
+  # Whitelist of admins that can use the console in discord
   Whitelist:
     Enabled: false
-    List: ["YOUR-DISCORD-ID"]
+    List: [ "YOUR-DISCORD-ID" ]
     Message: "Womp womp, no commands for you"
 
-
 Messages:
-  NoPermMsg: "&d[ConsoleDiscord] &cNope."
+  Discord:
+    MessageLimit: "\n\nThis message exceeded discord's 2,000 character limit. To see the complete log look in the console!"
+
+  InGame:
+    NoPerm: "&d[ConsoleDiscord] &cNope."
 
 Config:
-  IsModded: false # Change this if your server has mods
-  LibsUpdater: true
-  Debug: false
+  IgnoreWords: [] # if the log message contains one of these words, it will be ignored and not sent to the discord.
+
+  LogDelay: 20 # Delay between console logs checks, to send to the discord (in ticks)
+  LibsUpdater: true # Automatically update libraries on plugin startup
+  LogLevel: "INFO" # Log level for plugin (INFO, WARNING, DEBUG)
 
   Filter: # Filter commands from discord (Advanced users only)
     Enabled: false

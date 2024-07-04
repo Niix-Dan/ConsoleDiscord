@@ -20,8 +20,16 @@ public class Appender extends AbstractAppender {
 
     public void append(LogEvent event) {
         String message = event.getMessage().getFormattedMessage();
-        message = "["+ LocalTime.now() + " " + event.getLevel().toString() + "]:" + message + "\n";
-        this.messages+=message;
+        boolean shouldIgnore = false;
+
+        for(String txt : plugin.getConfig().getStringList("Config.IgnoreWords")) {
+            if(message.contains(txt)) shouldIgnore = true;
+        }
+
+        if(!shouldIgnore) {
+            message = "["+ LocalTime.now() + " " + event.getLevel().toString() + "]:" + message + "\n";
+            this.messages+=message;
+        }
     }
 
     public void sendMessages() {
@@ -35,10 +43,10 @@ public class Appender extends AbstractAppender {
                         msg = msg.replaceAll("(?:[&§][a-fk-oru0-9])", "");
 
                         if(msg.length() >= 2000) {
-                            String messageTooLong = "\n\nThis message exceeded discord's 2,000 character limit. To see the complete log look in the console!";
+                            String messageTooLong = plugin.getConfig().getString("Messages.Discord.MessageLimit", "\n\nThis message exceeded discord's 2,000 character limit. To see the complete log look in the console!");
 
                             msg = msg.substring(0, 1999 - messageTooLong.length() - 8);
-                            msg =msg + messageTooLong;
+                            msg = msg + messageTooLong;
                         }
 
                         jda.getTextChannelById(plugin.getConfig().getString("Discord-Bot.Channel")).sendMessage("```" + msg + "```").submit();
@@ -48,6 +56,6 @@ public class Appender extends AbstractAppender {
                 }
                 messages = "";
             }
-        }, 0L, 20L);
+        }, 0L, plugin.getConfig().getLong("Config.LogDelay", 20L));
     }
 }

@@ -1,72 +1,83 @@
 package niix.dan.consolediscord;
 
 import org.bukkit.ChatColor;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.kohsuke.github.*;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
 
 public class Updater {
-    private ConsoleDiscord plugin;
-    private String JDA_Lib = "https://github.com/Niix-Dan/Resources/releases/download/DiscordConsole/JDA.jar";
-    private String SLF4J_Lib = "https://github.com/Niix-Dan/Resources/releases/download/DiscordConsole/SLF4J.jar";
-    private String LOG4J_Lib = "https://github.com/Niix-Dan/Resources/releases/download/DiscordConsole/LOG4J.jar";
+    private JavaPlugin plugin;
+    private String owner = "Niix-Dan";
+    private String repo = "Resources";
+    private String[] libs = {"JDA.jar", "SLF4J.jar", "LOG4J.jar"};
+    private Http http = new Http();
 
-
-    Updater(ConsoleDiscord plugin) {
+    public Updater(JavaPlugin plugin) {
         this.plugin = plugin;
-
-        CreateWorkspace();
-        CheckUpdates();
+        createWorkspace();
+        checkAndUpdateLibs();
     }
 
-    public void CreateWorkspace() {
-        if(!plugin.getDataFolder().exists()) {
-            plugin.getDataFolder().mkdir();
+    private void createWorkspace() {
+        File dataFolder = plugin.getDataFolder();
+        if (!dataFolder.exists()) {
+            dataFolder.mkdirs();
         }
-        File file = new File(plugin.getDataFolder().getPath() + "/Libs");
-        if (!file.exists()) {
-            file.mkdir();
-        }
-    }
 
-    public void DownloadLibs(boolean update) {
-        Http http = new Http();
-        String path = plugin.getDataFolder().getPath().toString();
-
-        if (!new File(path + "/Libs/JDA.jar").exists()) {
-            if(!update) System.out.println(ChatColor.RED + "/Libs/JDA.jar not found! downloading...");
-            else System.out.println(ChatColor.RED + "Updating /Libs/JDA.jar [...]");
-            http.download(JDA_Lib, path + "/Libs/JDA.jar");
-        }
-        if (!new File(path + "/Libs/SLF4J.jar").exists()) {
-            if(!update) System.out.println(ChatColor.RED + "/Libs/SLF4J.jar not found! downloading...");
-            else System.out.println(ChatColor.RED + "Updating /Libs/SLF4J.jar [...]");
-            http.download(SLF4J_Lib, path + "/Libs/SLF4J.jar");
-        }
-        if (!new File(path + "/Libs/LOG4J.jar").exists()) {
-            if(!update) System.out.println(ChatColor.RED + "/Libs/LOG4J.jar not found! downloading...");
-            else System.out.println(ChatColor.RED + "Updating /Libs/LOG4J.jar [...]");
-            http.download(LOG4J_Lib, path + "/Libs/LOG4J.jar");
+        File libsFolder = new File(dataFolder, "Libs");
+        if (!libsFolder.exists()) {
+            libsFolder.mkdirs();
         }
     }
 
+    private void downloadLib(String libName) {
+        String downloadUrl = String.format("https://github.com/%s/%s/releases/latest/download/%s", owner, repo, libName);
+        String destinationPath = new File(plugin.getDataFolder(), "Libs/" + libName).getPath();
 
-    // Ugly way to check updates, but im sleepy
-    public void CheckUpdates() {
-        boolean isUpdate = false;
-        if(plugin.getConfig().getBoolean("Config.LibsUpdater")) {
-            String version = plugin.getConfig().getString("Config.Libs_version");
+        http.download(downloadUrl, destinationPath);
+    }
 
-            Http http = new Http();
-            String[] infos = http.get("https://raw.githubusercontent.com/Niix-Dan/Resources/main/ConsoleDiscord-Data").split("-");
-            if(!infos[0].equalsIgnoreCase(version)) {
-                plugin.getConfig().set("Config.Libs_version", infos[0]);
-                String path = plugin.getDataFolder().getPath().toString();
+    private void checkAndUpdateLibs() {
+        File libsFolder = new File(plugin.getDataFolder(), "Libs");
 
-                if(infos[1].equalsIgnoreCase("1") && new File(path + "/Libs/JDA.jar").exists()) {isUpdate = true;new File(path + "/Libs/JDA.jar").delete();}
-                if(infos[2].equalsIgnoreCase("1") && new File(path + "/Libs/SLF4J.jar").exists()) {isUpdate = true;new File(path + "/Libs/SLF4J.jar").delete();}
-                if(infos[3].equalsIgnoreCase("1") && new File(path + "/Libs/LOG4J.jar").exists()) {isUpdate = true;new File(path + "/Libs/LOG4J.jar").delete();}
+        // Verificar se todas as libs estão presentes
+        boolean allLibsPresent = true;
+        for (String lib : libs) {
+            File libFile = new File(libsFolder, lib);
+            if (!libFile.exists()) {
+                allLibsPresent = false;
+                break;
             }
         }
-        DownloadLibs(isUpdate);
+
+        if(!allLibsPresent || plugin.getConfig().getBoolean("Config.LibsUpdater", false)) {
+            GitHub github;
+            try {
+                github = new GitHubBuilder().build();
+                GHRelease latestRelease = github.getRepository(owner + "/" + repo).getLatestRelease();
+
+                if (latestRelease != null) {
+                    String latestVersion = latestRelease.getTagName();
+                    String storedVersion = plugin.getConfig().getString("Config.Libs_version", "");
+
+                    if (!latestVersion.equals(storedVersion)) {
+                        plugin.getConfig().set("Config.Libs_version", latestVersion);
+
+                        for (String lib : libs) {
+                            downloadLib(lib);
+                        }
+
+                        plugin.saveConfig();
+                        plugin.getLogger().log(Level.parse(plugin.getConfig().getString("Config.LogLevel", "INFO").replaceAll("DEBUG", "CONFIG")), ChatColor.GREEN + "Libraries updated to version " + latestVersion);
+
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
