@@ -10,11 +10,9 @@
 </p>
 
 # ConsoleDiscord
-
-
 | Download |Link|
 | ------------- | ------------- |
-| Latest version|[Click Here](https://github.com/Niix-Dan/ConsoleDiscord/releases/download/Releases/ConsoleDiscord.jar)|
+| Latest version|[Click Here](https://github.com/Niix-Dan/ConsoleDiscord/releases/latest/download/ConsoleDiscord.jar)|
 | Releases|[Click Here](https://github.com/Daniel-code15/ConsoleDiscord/releases)|
 
 
