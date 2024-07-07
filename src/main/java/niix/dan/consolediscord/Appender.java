@@ -39,8 +39,10 @@ public class Appender extends AbstractAppender {
                 try {
                     String msg = messages;
                     if(!msg.isEmpty()) {
-                        msg = msg.replaceAll("\033\\[[;\\d]*m", "");
-                        msg = msg.replaceAll("(?:[&§][a-fk-oru0-9])", "");
+                        //msg = msg.replaceAll("\033\\[[;\\d]*m", "");
+                        msg = msg.replaceAll("(?:[&§][a-fk-oru0-9])", ""); // Color codes filter
+                        msg = msg.replaceAll("\\p{C}", ""); // Removing ESC char
+
 
                         if(msg.length() >= 2000) {
                             String messageTooLong = plugin.getConfig().getString("Messages.Discord.MessageLimit", "\n\nThis message exceeded discord's 2,000 character limit. To see the complete log look in the console!");
