@@ -1,5 +1,5 @@
 name: ConsoleDiscord
-version: '1.1.1'
+version: '1.1.2'
 main: niix.dan.consolediscord.ConsoleDiscord
 load: STARTUP
 authors: [Niix-Dan]

@@ -29,10 +29,9 @@ public final class ConsoleDiscord extends JavaPlugin {
         `---'  `----' `-' `-'`----'  `----' `----'`----'   `----' `-'`----'  `---'  `----' `-' `-'`----'*/
 
         registerConfigs();
-        //registerCmds();
+        new Metrics(this, 22566);
 
         checkWarns();
-        new Updater(this);
 
         Bot();
     }

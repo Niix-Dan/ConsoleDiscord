@@ -1,6 +1,5 @@
 package niix.dan.consolediscord;
 
-import java.util.List;
 
 public enum ConfigEnum {
     DISCORD_BOT_TOKEN("BotToken", "Discord-Bot.Token", "Token para a aplicação Discord", "string"),
